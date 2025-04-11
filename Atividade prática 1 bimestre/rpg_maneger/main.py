@@ -88,7 +88,6 @@ async def buscar_personagem(id: str):
     personagem = await db.personagens.find_one({"_id": ObjectId(id)})
     if not personagem:
         raise HTTPException(status_code=404, detail="Personagem não encontrado")
-
     itens = [await db.itens.find_one({"_id": i}) for i in personagem.get("itens", [])]
     return {
         "id": str(personagem["_id"]),
@@ -143,32 +142,22 @@ async def adicionar_item(id_personagem: str, id_item: str):
     try:
         personagem = await db.personagens.find_one({"_id": ObjectId(id_personagem)})
         item = await db.itens.find_one({"_id": ObjectId(id_item)})
-
         if not personagem:
             raise HTTPException(status_code=404, detail="Personagem não encontrado")
         if not item:
             raise HTTPException(status_code=404, detail="Item não encontrado")
-
-        # Inicializa a lista se não existir
         itens_ids = personagem.get("itens", [])
-
-        # Verifica se item já está adicionado
         if ObjectId(id_item) in itens_ids:
             return {"mensagem": "Item já está atribuído ao personagem."}
-
-        # Valida amuleto duplicado
         if item["tipo"] == "Amuleto":
             for i_id in itens_ids:
                 i = await db.itens.find_one({"_id": i_id})
                 if i and i["tipo"] == "Amuleto":
                     raise HTTPException(status_code=400, detail="Personagem já possui um amuleto.")
-
-        # Adiciona item
         await db.personagens.update_one(
             {"_id": ObjectId(id_personagem)},
             {"$push": {"itens": item["_id"]}}
         )
-
         return {"mensagem": "Item adicionado ao personagem."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
