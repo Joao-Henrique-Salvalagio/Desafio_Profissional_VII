@@ -17,7 +17,7 @@ O sistema permite:
 
 ---
 
-## 🚀 Como executar o projeto
+## Como executar o projeto
 
 ### 1. Clone o repositório
 ```bash
