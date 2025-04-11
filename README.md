@@ -66,7 +66,7 @@ http://127.0.0.1:8000/docs
 
 ##  Regras e Validações do Sistema
 
-### 🎲 Personagem
+### Personagem
 - Deve distribuir **10 pontos entre Força e Defesa** (ex: 6-4, 5-5)
 - Classes válidas: `Guerreiro`, `Mago`, `Arqueiro`, `Ladino`, `Bardo`
 - Os atributos finais **consideram os bônus dos itens mágicos**
