@@ -5,27 +5,19 @@ import uuid
 
 app = FastAPI(title="RPG Manager API")
 
-# ==========================
-# MODELOS DE ENTRADA
-# ==========================
-
 class ItemMagicoModel(BaseModel):
     nome: str
-    tipo: str  # Arma, Armadura, Amuleto
+    tipo: str
     forca: int
     defesa: int
 
 class PersonagemModel(BaseModel):
     nome: str
     nome_aventureiro: str
-    classe: str  # Guerreiro, Mago, Arqueiro, Ladino, Bardo
+    classe: str
     level: int
     forca: int
     defesa: int
-
-# ==========================
-# ENTIDADES
-# ==========================
 
 class ItemMagico:
     def __init__(self, id, nome, tipo, forca, defesa):
@@ -100,16 +92,8 @@ class Personagem:
             "itens": [i.to_dict() for i in self.itens]
         }
 
-# ==========================
-# BANCOS EM MEMÓRIA
-# ==========================
-
 personagens = {}
 itens = {}
-
-# ==========================
-# ROTAS PERSONAGEM
-# ==========================
 
 @app.post("/personagens")
 def criar_personagem(data: PersonagemModel):
@@ -163,10 +147,6 @@ def remover_item_personagem(id: str, item_id: str):
         raise HTTPException(status_code=404, detail="Personagem não encontrado")
     personagens[id].remover_item(item_id)
     return {"mensagem": "Item removido do personagem."}
-
-# ==========================
-# ROTAS ITEM MÁGICO
-# ==========================
 
 @app.post("/itens")
 def criar_item(data: ItemMagicoModel):
